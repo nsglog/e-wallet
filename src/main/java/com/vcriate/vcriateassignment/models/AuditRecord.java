@@ -1,13 +1,18 @@
 package com.vcriate.vcriateassignment.models;
 
+import jakarta.persistence.Entity;
+import jakarta.persistence.OneToOne;
 import lombok.Getter;
 import lombok.Setter;
 
 import java.time.LocalDateTime;
 @Getter
 @Setter
-public class Transaction extends BaseModel  {
+@Entity
+public class AuditRecord extends BaseModel  {
+    @OneToOne
     private Wallet initiatedBy;
+    @OneToOne
     private Wallet InitiatedWith;
     private double amount;
     private TransactionType transactionType;

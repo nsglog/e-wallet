@@ -1,33 +1,52 @@
 package com.vcriate.vcriateassignment.services;
 
-import com.vcriate.vcriateassignment.models.Transaction;
+import com.vcriate.vcriateassignment.models.AuditRecord;
 import com.vcriate.vcriateassignment.models.TransactionType;
 import com.vcriate.vcriateassignment.models.Wallet;
 import com.vcriate.vcriateassignment.repository.WalletRepository;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 
 @Service
 public class CreateTransferService {
-    private CreateTransactionService createTransactionService;
-    public CreateTransferService(CreateTransactionService createTransactionService)   {
-        this.createTransactionService = createTransactionService;
+    private CreateAuditRecordService createAuditRecordService;
+    private WalletRepository walletRepository;
+    @Autowired
+    public CreateTransferService(CreateAuditRecordService createAuditRecordService,
+                                 WalletRepository walletRepository)   {
+        this.createAuditRecordService = createAuditRecordService;
+        this.walletRepository = walletRepository;
     }
 
-    public Transaction createTransfer (long transferToUserId, double amount, long transferFromUserId) {
+    public AuditRecord createTransfer (long transferToUserId, double amount, long transferFromUserId) {
 
-        Wallet transferToWallet = WalletRepository.getWalletByUserId(transferToUserId);
-        Wallet transferFromWallet = WalletRepository.getWalletByUserId(transferFromUserId);
+        Wallet transferToWallet = walletRepository.getWalletByUserId(transferToUserId);
+        Wallet transferFromWallet = walletRepository.getWalletByUserId(transferFromUserId);
 
-        WalletRepository.transfer(transferToWallet, amount, transferFromWallet);
+        if(transferToWallet == null)    {
+            return null;
+        }
 
-        Transaction transaction = createTransactionService.createTransaction(transferFromWallet,
-                transferToWallet,
-                amount,
-                TransactionType.TRANSFER,
-                LocalDateTime.now());
+        double current_amount = transferFromWallet.getBalance();
 
-        return transaction;
+        if(current_amount >= amount) {
+
+            double new_amount = current_amount - amount;
+
+            transferFromWallet.setBalance(new_amount);
+            transferToWallet.setBalance(transferToWallet.getBalance() + amount);
+
+            AuditRecord auditRecord = createAuditRecordService.createTransaction(transferFromWallet,
+                    transferToWallet,
+                    amount,
+                    TransactionType.TRANSFER,
+                    LocalDateTime.now());
+
+            return auditRecord;
+        }
+
+        return null;
     }
 }
