@@ -3,7 +3,7 @@ package com.vcriate.vcriateassignment.controllers;
 import com.vcriate.vcriateassignment.dtos.requestdtos.CreateWithdrawRequestDto;
 import com.vcriate.vcriateassignment.dtos.responsedtos.CreateWithdrawResponseDto;
 import com.vcriate.vcriateassignment.models.AuditRecord;
-import com.vcriate.vcriateassignment.services.CreateWithdrawService;
+import com.vcriate.vcriateassignment.services.WithdrawService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -12,10 +12,10 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 public class WithdrawController {
-    private CreateWithdrawService createWithdrawService;
+    private WithdrawService withdrawService;
     @Autowired
-    public WithdrawController (CreateWithdrawService createWithdrawService)    {
-        this.createWithdrawService = createWithdrawService;
+    public WithdrawController (WithdrawService withdrawService)    {
+        this.withdrawService = withdrawService;
     }
 
     @PostMapping(value = "/user/{id}/withdraw")
@@ -25,7 +25,7 @@ public class WithdrawController {
         CreateWithdrawResponseDto createWithdrawResponseDto = new CreateWithdrawResponseDto();
 
         try {
-            auditRecord = createWithdrawService.createWithdraw(requestDto.getAmount(), Long.parseLong(id));
+            auditRecord = withdrawService.createWithdraw(requestDto.getAmount(), Long.parseLong(id));
             createWithdrawResponseDto.setAuditRecord(auditRecord);
             createWithdrawResponseDto.setMessage("SUCCESS");
         }

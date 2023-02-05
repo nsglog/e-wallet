@@ -12,13 +12,13 @@ import java.time.LocalDateTime;
 import java.util.Optional;
 
 @Service
-public class CreateWithdrawService {
-    private CreateAuditRecordService createAuditRecordService;
+public class WithdrawService {
+    private AuditRecordService auditRecordService;
     private WalletRepository walletRepository;
     @Autowired
-    public CreateWithdrawService(CreateAuditRecordService createAuditRecordService,
-                                 WalletRepository walletRepository)   {
-        this.createAuditRecordService = createAuditRecordService;
+    public WithdrawService(AuditRecordService auditRecordService,
+                           WalletRepository walletRepository)   {
+        this.auditRecordService = auditRecordService;
         this.walletRepository = walletRepository;
     }
 
@@ -33,7 +33,7 @@ public class CreateWithdrawService {
             double new_amount = currentAmount - amount;
             wallet.setBalance(new_amount);
             walletRepository.save(wallet);
-            AuditRecord auditRecord = createAuditRecordService.createTransaction(wallet,
+            AuditRecord auditRecord = auditRecordService.createAuditRecord(wallet,
                     null,
                     amount,
                     TransactionType.WITHDRAW,

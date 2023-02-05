@@ -11,15 +11,15 @@ import org.springframework.stereotype.Service;
 import java.util.Optional;
 
 @Service
-public class CreateWalletService {
-    private CreateUserService createUserService;
+public class WalletService {
+    private UserService userService;
     private WalletRepository walletRepository;
     private UserRepository userRepository;
     @Autowired
-    public CreateWalletService(CreateUserService createUserService,
-                               WalletRepository walletRepository,
-                               UserRepository userRepository)  {
-        this.createUserService = createUserService;
+    public WalletService(UserService userService,
+                         WalletRepository walletRepository,
+                         UserRepository userRepository)  {
+        this.userService = userService;
         this.walletRepository = walletRepository;
         this.userRepository= userRepository;
     }
@@ -32,7 +32,7 @@ public class CreateWalletService {
             throw new UserAlreadyExist("User Already Exist");
         };
 
-        User new_user = createUserService.createUser(name, email, phoneNumber);
+        User new_user = userService.createUser(name, email, phoneNumber);
         Wallet wallet = new Wallet();
         wallet.setUser(new_user);
         wallet.setBalance(0.0);

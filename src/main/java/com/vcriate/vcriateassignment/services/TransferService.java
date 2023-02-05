@@ -13,13 +13,13 @@ import java.time.LocalDateTime;
 import java.util.Optional;
 
 @Service
-public class CreateTransferService {
-    private CreateAuditRecordService createAuditRecordService;
+public class TransferService {
+    private AuditRecordService auditRecordService;
     private WalletRepository walletRepository;
     @Autowired
-    public CreateTransferService(CreateAuditRecordService createAuditRecordService,
-                                 WalletRepository walletRepository)   {
-        this.createAuditRecordService = createAuditRecordService;
+    public TransferService(AuditRecordService auditRecordService,
+                           WalletRepository walletRepository)   {
+        this.auditRecordService = auditRecordService;
         this.walletRepository = walletRepository;
     }
 
@@ -45,7 +45,7 @@ public class CreateTransferService {
             transferFromWallet.setBalance(new_amount);
             transferToWallet.setBalance(transferToWallet.getBalance() + amount);
 
-            AuditRecord auditRecord = createAuditRecordService.createTransaction(transferFromWallet,
+            AuditRecord auditRecord = auditRecordService.createAuditRecord(transferFromWallet,
                     transferToWallet,
                     amount,
                     TransactionType.TRANSFER,

@@ -4,7 +4,7 @@ import com.vcriate.vcriateassignment.models.User;
 import org.springframework.stereotype.Service;
 
 @Service
-public class CreateUserService {
+public class UserService {
 
     public User createUser (String name, String email, Long phoneNumber) {
 

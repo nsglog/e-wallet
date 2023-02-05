@@ -12,14 +12,14 @@ import java.time.LocalDateTime;
 import java.util.Optional;
 
 @Service
-public class CreateDepositService {
-    private CreateAuditRecordService createAuditRecordService;
+public class DepositService {
+    private AuditRecordService auditRecordService;
     private WalletRepository walletRepository;
     @Autowired
-    public CreateDepositService(CreateAuditRecordService createAuditRecordService,
-                                WalletRepository walletRepository,
-                                AuditRecordRepository auditRecordRepository)   {
-        this.createAuditRecordService = createAuditRecordService;
+    public DepositService(AuditRecordService auditRecordService,
+                          WalletRepository walletRepository,
+                          AuditRecordRepository auditRecordRepository)   {
+        this.auditRecordService = auditRecordService;
         this.walletRepository = walletRepository;
     }
 
@@ -30,7 +30,7 @@ public class CreateDepositService {
         wallet.setBalance(wallet.getBalance() + amount);
         walletRepository.save(wallet);
 
-        AuditRecord auditRecord = createAuditRecordService.createTransaction(wallet,
+        AuditRecord auditRecord = auditRecordService.createAuditRecord(wallet,
                 null,
                 amount,
                 TransactionType.DEPOSIT,

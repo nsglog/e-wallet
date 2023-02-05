@@ -6,15 +6,15 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import java.time.LocalDateTime;
 @Service
-public class CreateAuditRecordService extends Exception   {
+public class AuditRecordService extends Exception   {
 
     private AuditRecordRepository auditRecordRepository;
     @Autowired
-    public CreateAuditRecordService(AuditRecordRepository auditRecordRepository) {
+    public AuditRecordService(AuditRecordRepository auditRecordRepository) {
         this.auditRecordRepository = auditRecordRepository;
     }
 
-    public AuditRecord createTransaction (Wallet initiatedBy,
+    public AuditRecord createAuditRecord (Wallet initiatedBy,
                                           Wallet initiatedWith,
                                           double amount,
                                           TransactionType transactionType,
