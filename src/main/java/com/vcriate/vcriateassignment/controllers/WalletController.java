@@ -19,13 +19,21 @@ public class WalletController {
 
     @PostMapping(value = "/wallet")
     public CreateWalletResponseDto createWallet (@RequestBody CreateWalletRequestDto requestDto)   {
-        Wallet wallet = createWalletService.createWallet(requestDto.getName(),
-                requestDto.getEmail(),
-                requestDto.getPhoneNumber());
 
+        Wallet wallet;
         CreateWalletResponseDto createWalletResponseDto = new CreateWalletResponseDto();
-        createWalletResponseDto.setWallet(wallet);
-        createWalletResponseDto.setMessage("Wallet created successfully");
+
+        try {
+            wallet = createWalletService.createWallet(requestDto.getName(),
+                        requestDto.getEmail(),
+                        requestDto.getPhoneNumber());
+            createWalletResponseDto.setWallet(wallet);
+            createWalletResponseDto.setMessage("Wallet created successfully");
+        }
+
+        catch (Exception exception) {
+            createWalletResponseDto.setMessage(exception.getMessage());
+        }
 
         return createWalletResponseDto;
     }

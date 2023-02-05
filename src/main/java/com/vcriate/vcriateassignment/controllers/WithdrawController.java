@@ -18,12 +18,21 @@ public class WithdrawController {
         this.createWithdrawService = createWithdrawService;
     }
 
-    @PostMapping(value = "/withdraw/{id}")
+    @PostMapping(value = "/user/{id}/withdraw")
     public CreateWithdrawResponseDto createWithdraw (@RequestBody CreateWithdrawRequestDto requestDto, @PathVariable String id)  {
-        AuditRecord auditRecord = createWithdrawService.createWithdraw(requestDto.getAmount(), Long.parseLong(id));
+
+        AuditRecord auditRecord;
         CreateWithdrawResponseDto createWithdrawResponseDto = new CreateWithdrawResponseDto();
-        createWithdrawResponseDto.setAuditRecord(auditRecord);
-        createWithdrawResponseDto.setMessage("SUCCESS");
+
+        try {
+            auditRecord = createWithdrawService.createWithdraw(requestDto.getAmount(), Long.parseLong(id));
+            createWithdrawResponseDto.setAuditRecord(auditRecord);
+            createWithdrawResponseDto.setMessage("SUCCESS");
+        }
+        catch (Exception exception) {
+            createWithdrawResponseDto.setMessage(exception.getMessage());
+        }
+
         return createWithdrawResponseDto;
     }
 }

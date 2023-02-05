@@ -1,5 +1,6 @@
 package com.vcriate.vcriateassignment.services;
 
+import com.vcriate.vcriateassignment.exceptions.InsufficientFunds;
 import com.vcriate.vcriateassignment.models.AuditRecord;
 import com.vcriate.vcriateassignment.models.TransactionType;
 import com.vcriate.vcriateassignment.models.Wallet;
@@ -8,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.util.Optional;
 
 @Service
 public class CreateWithdrawService {
@@ -20,15 +22,18 @@ public class CreateWithdrawService {
         this.walletRepository = walletRepository;
     }
 
-    public AuditRecord createWithdraw (Double amount, long id) {
+    public AuditRecord createWithdraw (Double amount, long id) throws Exception {
 
-        Wallet wallet = walletRepository.getWalletByUserId(id);
+        Optional<Wallet> _wallet = walletRepository.getWalletByUserId(id);
+        Wallet wallet = _wallet.get();
+
         double currentAmount = wallet.getBalance();
 
         if(currentAmount > amount)  {
             double new_amount = currentAmount - amount;
             wallet.setBalance(new_amount);
-            AuditRecord auditRecord = createAuditRecordService.createTransaction(new Wallet(),
+            walletRepository.save(wallet);
+            AuditRecord auditRecord = createAuditRecordService.createTransaction(wallet,
                     null,
                     amount,
                     TransactionType.WITHDRAW,
@@ -36,6 +41,6 @@ public class CreateWithdrawService {
             return auditRecord;
         }
 
-        return null;
+        throw new InsufficientFunds("Insufficient Funds");
     }
 }

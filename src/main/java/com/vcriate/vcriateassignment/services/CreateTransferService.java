@@ -1,5 +1,7 @@
 package com.vcriate.vcriateassignment.services;
 
+import com.vcriate.vcriateassignment.exceptions.InsufficientFunds;
+import com.vcriate.vcriateassignment.exceptions.InvalidUser;
 import com.vcriate.vcriateassignment.models.AuditRecord;
 import com.vcriate.vcriateassignment.models.TransactionType;
 import com.vcriate.vcriateassignment.models.Wallet;
@@ -8,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.util.Optional;
 
 @Service
 public class CreateTransferService {
@@ -20,14 +23,18 @@ public class CreateTransferService {
         this.walletRepository = walletRepository;
     }
 
-    public AuditRecord createTransfer (long transferToUserId, double amount, long transferFromUserId) {
+    public AuditRecord createTransfer (long transferToUserId, double amount,
+                                       long transferFromUserId) throws Exception {
 
-        Wallet transferToWallet = walletRepository.getWalletByUserId(transferToUserId);
-        Wallet transferFromWallet = walletRepository.getWalletByUserId(transferFromUserId);
+        Optional<Wallet> _transferToWallet = walletRepository.getWalletByUserId(transferToUserId);
+        Optional<Wallet> _transferFromWallet = walletRepository.getWalletByUserId(transferFromUserId);
 
-        if(transferToWallet == null)    {
-            return null;
+        if(_transferToWallet == null)    {
+            throw new InvalidUser("User does not exist");
         }
+
+        Wallet transferToWallet = _transferToWallet.get();
+        Wallet transferFromWallet = _transferFromWallet.get();
 
         double current_amount = transferFromWallet.getBalance();
 
@@ -47,6 +54,6 @@ public class CreateTransferService {
             return auditRecord;
         }
 
-        return null;
+        throw new InsufficientFunds("Insufficient Funds");
     }
 }

@@ -1,11 +1,14 @@
 package com.vcriate.vcriateassignment.services;
 
+import com.vcriate.vcriateassignment.exceptions.UserAlreadyExist;
 import com.vcriate.vcriateassignment.models.User;
 import com.vcriate.vcriateassignment.models.Wallet;
 import com.vcriate.vcriateassignment.repository.UserRepository;
 import com.vcriate.vcriateassignment.repository.WalletRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import java.util.Optional;
 
 @Service
 public class CreateWalletService {
@@ -21,11 +24,13 @@ public class CreateWalletService {
         this.userRepository= userRepository;
     }
 
-    public Wallet createWallet (String name, String email, Long phoneNumber)  {
+    public Wallet createWallet (String name, String email, Long phoneNumber) throws Exception {
 
-        User user = userRepository.getUserByPhoneNumber(phoneNumber);
+        Optional<User> user = userRepository.getUserByPhoneNumber(phoneNumber);
 
-        if(user != null)    return null;
+        if(user != null)    {
+            throw new UserAlreadyExist("User Already Exist");
+        };
 
         User new_user = createUserService.createUser(name, email, phoneNumber);
         Wallet wallet = new Wallet();

@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.util.Optional;
 
 @Service
 public class CreateDepositService {
@@ -24,8 +25,10 @@ public class CreateDepositService {
 
     public AuditRecord createDeposit (Double amount, long id) {
 
-        Wallet wallet = walletRepository.getWalletByUserId(id);
+        Optional<Wallet> _wallet = walletRepository.getWalletByUserId(id);
+        Wallet wallet = _wallet.get();
         wallet.setBalance(wallet.getBalance() + amount);
+        walletRepository.save(wallet);
 
         AuditRecord auditRecord = createAuditRecordService.createTransaction(wallet,
                 null,

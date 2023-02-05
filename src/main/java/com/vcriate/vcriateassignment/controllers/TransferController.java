@@ -19,14 +19,24 @@ public class TransferController {
     }
 
     @PostMapping(value = "/user/{id}/transfer")
-    public CreateTransferResponseDto createTransfer (@RequestBody CreateTransferRequestDto requestDto, @PathVariable String id)  {
-        AuditRecord auditRecord = createTransferService.createTransfer(requestDto.getTransferToUserId(),
-                requestDto.getAmount(),
-                Long.parseLong(id));
+    public CreateTransferResponseDto createTransfer (@RequestBody CreateTransferRequestDto requestDto,
+                                                     @PathVariable String id)   {
 
+        AuditRecord auditRecord;
         CreateTransferResponseDto createTransferResponseDto = new CreateTransferResponseDto();
-        createTransferResponseDto.setAuditRecord(auditRecord);
-        createTransferResponseDto.setMessage("SUCCESS");
+
+        try {
+            auditRecord = createTransferService.createTransfer(requestDto.getTransferToUserId(),
+                    requestDto.getAmount(),
+                    Long.parseLong(id));
+
+            createTransferResponseDto.setAuditRecord(auditRecord);
+            createTransferResponseDto.setMessage("SUCCESS");
+        }
+        catch (Exception exception) {
+            createTransferResponseDto.setMessage(exception.getMessage());
+        }
+
         return createTransferResponseDto;
     }
 }
