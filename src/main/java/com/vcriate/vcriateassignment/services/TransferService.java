@@ -2,20 +2,15 @@ package com.vcriate.vcriateassignment.services;
 
 import com.vcriate.vcriateassignment.exceptions.InsufficientFunds;
 import com.vcriate.vcriateassignment.exceptions.InvalidUser;
-import com.vcriate.vcriateassignment.exceptions.UnderTransaction;
 import com.vcriate.vcriateassignment.models.AuditRecord;
 import com.vcriate.vcriateassignment.models.TransactionType;
 import com.vcriate.vcriateassignment.models.Wallet;
-import com.vcriate.vcriateassignment.models.WalletStatusForTransaction;
 import com.vcriate.vcriateassignment.repository.WalletRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.autoconfigure.kafka.KafkaProperties;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Isolation;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
-import java.util.Objects;
 import java.util.Optional;
 
 import static org.springframework.transaction.annotation.Isolation.SERIALIZABLE;
