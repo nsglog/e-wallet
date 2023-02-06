@@ -30,14 +30,17 @@ public class WithdrawService {
         double currentAmount = wallet.getBalance();
 
         if(currentAmount > amount)  {
+
             double new_amount = currentAmount - amount;
             wallet.setBalance(new_amount);
             walletRepository.save(wallet);
+
             AuditRecord auditRecord = auditRecordService.createAuditRecord(wallet,
                     null,
                     amount,
                     TransactionType.WITHDRAW,
                     LocalDateTime.now());
+
             return auditRecord;
         }
 

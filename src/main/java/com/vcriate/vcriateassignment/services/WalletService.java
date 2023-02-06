@@ -3,6 +3,7 @@ package com.vcriate.vcriateassignment.services;
 import com.vcriate.vcriateassignment.exceptions.UserAlreadyExist;
 import com.vcriate.vcriateassignment.models.User;
 import com.vcriate.vcriateassignment.models.Wallet;
+import com.vcriate.vcriateassignment.models.WalletStatusForTransaction;
 import com.vcriate.vcriateassignment.repository.UserRepository;
 import com.vcriate.vcriateassignment.repository.WalletRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -36,6 +37,7 @@ public class WalletService {
         Wallet wallet = new Wallet();
         wallet.setUser(new_user);
         wallet.setBalance(0.0);
+        wallet.setWalletStatusForTransaction(WalletStatusForTransaction.OPEN);
         walletRepository.save(wallet);
         return wallet;
     }
