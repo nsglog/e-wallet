@@ -3,17 +3,15 @@ package com.vcriate.vcriateassignment.security;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.security.config.Customizer;
-import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.web.SecurityFilterChain;
 
-import static org.springframework.http.HttpMethod.POST;
+import static org.springframework.http.HttpMethod.GET;
 
 @Configuration
 @EnableWebSecurity
-@EnableMethodSecurity
 public class WebSecurityConfiguration {
 
     private AccountAuthenticationProvider authenticationProvider;
@@ -26,11 +24,11 @@ public class WebSecurityConfiguration {
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
 
-            http.authorizeHttpRequests((requests) -> requests
-                        .requestMatchers(POST, "/wallet").permitAll())
-                    .authenticationProvider(authenticationProvider)
-                    .httpBasic(Customizer.withDefaults());
-
+            http.csrf().disable();
+            http.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
+            http.authorizeHttpRequests().requestMatchers("/wallet").permitAll();
+            http.authorizeHttpRequests().requestMatchers("/user/**").hasAnyRole("ROLE_USER","ROLE_ADMIN").anyRequest().authenticated();
+            http.authenticationProvider(authenticationProvider);
 
             return http.build();
     }

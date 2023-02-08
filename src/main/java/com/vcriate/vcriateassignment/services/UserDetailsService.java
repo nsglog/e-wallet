@@ -1,9 +1,7 @@
 package com.vcriate.vcriateassignment.services;
 
 import com.vcriate.vcriateassignment.models.Wallet;
-import com.vcriate.vcriateassignment.models.WalletStatusForTransaction;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Bean;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.User;
@@ -12,6 +10,7 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
 import java.util.Collection;
+import java.util.Optional;
 
 import static java.util.stream.Collectors.toList;
 
@@ -25,16 +24,31 @@ public class UserDetailsService implements org.springframework.security.core.use
     }
 
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        Wallet wallet = walletService.findByUserName(username);
-        if(wallet == null) {
+
+        Optional<Wallet> wallet = walletService.findByUserName(username);
+
+        if(wallet.isEmpty()) {
             throw new UsernameNotFoundException("User " + username + " not found");
         }
-        if(wallet.getRoleSet() == null || wallet.getRoleSet().isEmpty()) {
+
+        if(wallet.get().getRoleSet() == null || wallet.get().getRoleSet().isEmpty()) {
             throw new RuntimeException("User has no roles");
         }
-        Collection<GrantedAuthority> authorities = wallet.getRoleSet().stream()
+
+        Collection<GrantedAuthority> authorities = wallet.get().getRoleSet().stream()
                 .map(role -> new SimpleGrantedAuthority(role.getName())).collect(toList());
-        return new User(wallet.getUsername(), wallet.getPassword(), true,true,true,true, authorities);
+
+        for(GrantedAuthority authority : authorities)   {
+            System.out.println(authority.getAuthority().toString());
+        }
+
+        return new User(wallet.get().getUsername(),
+                wallet.get().getPassword(),
+                true,
+                true,
+                true,
+                true,
+                authorities);
     }
 
 

@@ -1,6 +1,7 @@
 package com.vcriate.vcriateassignment.models;
 
 import jakarta.persistence.Entity;
+import jakarta.persistence.UniqueConstraint;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;

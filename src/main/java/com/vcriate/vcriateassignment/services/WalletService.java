@@ -1,40 +1,38 @@
 package com.vcriate.vcriateassignment.services;
 
 import com.vcriate.vcriateassignment.exceptions.UserAlreadyExist;
-import com.vcriate.vcriateassignment.models.AuditRecord;
+import com.vcriate.vcriateassignment.models.Role;
 import com.vcriate.vcriateassignment.models.User;
 import com.vcriate.vcriateassignment.models.Wallet;
 import com.vcriate.vcriateassignment.models.WalletStatusForTransaction;
-import com.vcriate.vcriateassignment.repository.AuditRecordRepository;
-import com.vcriate.vcriateassignment.repository.RoleRepository;
 import com.vcriate.vcriateassignment.repository.UserRepository;
 import com.vcriate.vcriateassignment.repository.WalletRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 
 @Service
 public class WalletService {
     private UserService userService;
     private WalletRepository walletRepository;
     private UserRepository userRepository;
-    private RoleRepository roleRepository;
-    private PasswordEncoder encoder;
+
     @Autowired
     public WalletService(UserService userService,
                          WalletRepository walletRepository,
-                         UserRepository userRepository,
-                         AuditRecordRepository auditRecordRepository)  {
+                         UserRepository userRepository)  {
         this.userService = userService;
         this.walletRepository = walletRepository;
         this.userRepository= userRepository;
-        this.roleRepository = null;
     }
 
-    public User createWallet (String name, String username, String email, Long phoneNumber, String password) throws Exception {
+    public User createWallet (String name,
+                              String username,
+                              String email,
+                              Long phoneNumber,
+                              String password, Set<Role> roleSet) throws Exception {
 
 
 
@@ -51,6 +49,7 @@ public class WalletService {
         wallet.setUsername(username);
         wallet.setPassword(password);
         wallet.setBalance(0.0);
+        wallet.setRoleSet(roleSet);
         wallet.setWalletStatusForTransaction(WalletStatusForTransaction.UNLOCKED);
 
         walletRepository.save(wallet);
@@ -58,8 +57,8 @@ public class WalletService {
         return new_user;
     }
 
-    public Wallet findByUserName(String username)   {
-        return walletRepository.findByUserName(username);
+    public Optional<Wallet> findByUserName(String username)   {
+        return Optional.ofNullable(walletRepository.findByUserName(username));
     }
 
 }

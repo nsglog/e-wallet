@@ -21,8 +21,8 @@ public class WalletController {
     }
 
 
+    @PermitAll
     @PostMapping(value = "/wallet")
-    @PreAuthorize(value = "PermitAll")
     public @ResponseBody CreateWalletResponseDto createWallet (@RequestBody CreateWalletRequestDto requestDto)   {
 
         User user;
@@ -33,7 +33,8 @@ public class WalletController {
                         requestDto.getUsername(),
                         requestDto.getEmail(),
                         requestDto.getPhoneNumber(),
-                        requestDto.getPassword());
+                        requestDto.getPassword(),
+                        requestDto.getRoleSet());
             createWalletResponseDto.setUser(user);
             createWalletResponseDto.setMessage("wallet for user created successfully");
         }
