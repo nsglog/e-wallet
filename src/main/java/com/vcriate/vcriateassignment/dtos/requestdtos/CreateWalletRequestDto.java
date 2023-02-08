@@ -8,7 +8,9 @@ import lombok.Setter;
 public class CreateWalletRequestDto {
 
     private String name;
+    private String username;
     private String email;
     private Long phoneNumber;
+    private String password;
 
 }

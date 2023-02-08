@@ -21,10 +21,18 @@ public class DepositController {
     @PostMapping(value = "/user/{id}/deposit")
     public CreateDepositResponseDto createDeposit (@RequestBody CreateDepositRequestDto requestDto, @PathVariable String id)  {
 
-        AuditRecord auditRecord = depositService.createDeposit(requestDto.getAmount(), Long.parseLong(id));
+        AuditRecord auditRecord;
         CreateDepositResponseDto createDepositResponseDto = new CreateDepositResponseDto();
-        createDepositResponseDto.setMessage("SUCCESS");
-        createDepositResponseDto.setAuditRecord(auditRecord);
+
+        try {
+            auditRecord = depositService.createDeposit(requestDto.getAmount(), Long.parseLong(id));
+            createDepositResponseDto.setMessage("SUCCESS");
+            createDepositResponseDto.setAuditRecord(auditRecord);
+        }
+        catch (Exception exception) {
+            createDepositResponseDto.setMessage(exception.getMessage());
+        }
+
         return createDepositResponseDto;
     }
 }

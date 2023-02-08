@@ -7,7 +7,6 @@ import lombok.Setter;
 @Setter
 public class CreateTransferRequestDto {
 
-    private long transferFromUserId;
     private double amount;
     private long transferToUserId;
 

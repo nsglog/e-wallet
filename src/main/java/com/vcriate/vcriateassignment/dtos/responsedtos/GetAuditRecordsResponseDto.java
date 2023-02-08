@@ -4,9 +4,10 @@ import com.vcriate.vcriateassignment.models.AuditRecord;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.util.List;
 @Getter
 @Setter
-public class CreateTransferResponseDto {
-    private AuditRecord auditRecord;
+public class GetAuditRecordsResponseDto {
+    private List<AuditRecord> auditRecordList;
     private String message;
 }

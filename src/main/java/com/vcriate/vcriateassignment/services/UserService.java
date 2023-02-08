@@ -1,5 +1,6 @@
 package com.vcriate.vcriateassignment.services;
 
+//import com.vcriate.vcriateassignment.configurations.SecurityConfiguration;
 import com.vcriate.vcriateassignment.models.User;
 import com.vcriate.vcriateassignment.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,7 +15,7 @@ public class UserService {
         this.userRepository = userRepository;
     }
 
-    public User createUser (String name, String email, Long phoneNumber) {
+    public User createUser (String name, String email, Long phoneNumber, String password) {
 
         User user = new User();
         user.setName(name);

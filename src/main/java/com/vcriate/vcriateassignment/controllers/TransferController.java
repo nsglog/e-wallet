@@ -26,9 +26,9 @@ public class TransferController {
         CreateTransferResponseDto createTransferResponseDto = new CreateTransferResponseDto();
 
         try {
-            auditRecord = transferService.createTransfer(requestDto.getTransferToUserId(),
+            auditRecord = transferService.createTransfer(Long.parseLong(id),
                     requestDto.getAmount(),
-                    Long.parseLong(id));
+                    requestDto.getTransferToUserId());
 
             createTransferResponseDto.setAuditRecord(auditRecord);
             createTransferResponseDto.setMessage("SUCCESS");

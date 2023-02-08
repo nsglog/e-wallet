@@ -11,11 +11,8 @@ import java.time.LocalDateTime;
 @Entity
 public class AuditRecord extends BaseModel  {
     @OneToOne
-    private Wallet initiatedBy;
-    @OneToOne
-    private Wallet InitiatedWith;
+    private Wallet wallet;
     private double amount;
     private TransactionType transactionType;
     private LocalDateTime timeOfTransaction;
-    private TransactionStatus transactionStatus;
 }

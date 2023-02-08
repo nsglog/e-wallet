@@ -14,8 +14,9 @@ public interface WalletRepository extends JpaRepository<Wallet, Long> {
     Wallet save (Wallet wallet);
     Optional<Wallet> getWalletByUserId(long id);
 
-    @Lock(LockModeType.PESSIMISTIC_WRITE)
-    @Query(value = "select from wallet where user_id = ?1", nativeQuery = true)
+//    @Lock(LockModeType.PESSIMISTIC_WRITE)
+    @Query(value = "select * from wallet where user_id = ?1 for update ", nativeQuery = true)
     Optional<Wallet> getWalletByUserIdForUpdate (long id);
 
+    Wallet findByUserName (String username);
 }

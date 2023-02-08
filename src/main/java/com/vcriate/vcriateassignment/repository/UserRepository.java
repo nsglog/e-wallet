@@ -2,6 +2,7 @@ package com.vcriate.vcriateassignment.repository;
 
 import com.vcriate.vcriateassignment.models.User;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
 import java.util.Optional;
@@ -12,5 +13,6 @@ public interface UserRepository extends JpaRepository<User, Long> {
     @Override
     User save (User user);
 
-    Optional<User> getUserByPhoneNumber(long phoneNumber);
+    @Query(value = "select * from user where phone_number = ?1", nativeQuery = true)
+    Optional<User> findUserByPhoneNumber(long phoneNumber);
 }
