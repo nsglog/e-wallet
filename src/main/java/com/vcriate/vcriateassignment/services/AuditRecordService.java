@@ -38,7 +38,7 @@ public class AuditRecordService extends Exception   {
 
     public List<AuditRecord> getAuditRecordsOfUser (long id) {
 
-        Wallet wallet = walletRepository.getWalletByUserId(id).get();
+        Wallet wallet = walletRepository.findById(id).get();
 
         List<AuditRecord> auditRecordList = auditRecordRepository.findAuditRecords(wallet.getId());
 

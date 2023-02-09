@@ -31,8 +31,8 @@ public class TransferService {
     public AuditRecord createTransfer (long transferFromUserId, double amount,
                                        long transferToUserId) throws Exception {
 
-        Optional<Wallet> _transferToWallet = walletRepository.getWalletByUserId(transferToUserId);
-        Optional<Wallet> _transferFromWallet = walletRepository.getWalletByUserId(transferFromUserId);
+        Optional<Wallet> _transferToWallet = walletRepository.findById(transferToUserId);
+        Optional<Wallet> _transferFromWallet = walletRepository.findById(transferFromUserId);
 
         if(_transferToWallet.isEmpty())    {
             throw new InvalidUser("User does not exist, please enter a valid user");

@@ -27,7 +27,7 @@ public class DepositService {
 
     public AuditRecord createDeposit (Double amount, long id) throws Exception{
 
-        Wallet wallet = walletRepository.getWalletByUserId(id).get();
+        Wallet wallet = walletRepository.findById(id).get();
 
         if(wallet.getWalletStatusForTransaction().equals(WalletStatusForTransaction.LOCKED))    {
             throw new UnderTransaction("Your wallet is currently involved in another transaction");

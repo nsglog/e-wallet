@@ -30,7 +30,7 @@ public class WithdrawService {
 
     public AuditRecord createWithdraw (Double amount, long id) throws Exception {
 
-        Wallet wallet = walletRepository.getWalletByUserId(id).get();
+        Wallet wallet = walletRepository.findById(id).get();
 
         double currentAmount = wallet.getBalance();
 

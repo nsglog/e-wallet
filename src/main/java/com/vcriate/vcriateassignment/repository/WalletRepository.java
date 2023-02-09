@@ -12,11 +12,9 @@ import java.util.Optional;
 @Repository
 public interface WalletRepository extends JpaRepository<Wallet, Long> {
     Wallet save (Wallet wallet);
-    Optional<Wallet> getWalletByUserId(long id);
+    Optional<Wallet> findWalletByPhoneNumber(long id);
 
 //    @Lock(LockModeType.PESSIMISTIC_WRITE)
-    @Query(value = "select * from wallet where user_id = ?1 for update ", nativeQuery = true)
+    @Query(value = "select * from wallet where id = ?1 for update ", nativeQuery = true)
     Optional<Wallet> getWalletByUserIdForUpdate (long id);
-
-    Wallet findByUserName (String username);
 }

@@ -1,13 +1,14 @@
 package com.vcriate.vcriateassignment.dtos.responsedtos;
 
-import com.vcriate.vcriateassignment.models.User;
+import com.vcriate.vcriateassignment.models.Account;
 import lombok.Getter;
 import lombok.Setter;
 
 @Getter
 @Setter
-public class CreateWalletResponseDto {
+public class CreateAccountResponseDto {
 
-    private User user;
+    private Account account;
     private String message;
+
 }

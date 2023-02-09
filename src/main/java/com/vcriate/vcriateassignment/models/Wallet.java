@@ -17,20 +17,11 @@ import static jakarta.persistence.FetchType.EAGER;
 @Entity
 public class Wallet extends BaseModel   {
 
-    @OneToOne
     @Nonnull
-    private User user;
+    private String name;
+    private String email;
+    private Long phoneNumber;
     private double balance;
-    private String username;
-    private String password;
-    @ManyToMany(fetch = EAGER, cascade = ALL)
-    @JoinTable(
-            name = "WalletRole",
-            joinColumns = @JoinColumn(name = "walletId", referencedColumnName = "id"),
-            inverseJoinColumns = @JoinColumn(name = "roleId", referencedColumnName = "id")
-    )
-    private Set<Role> roleSet;
-    @Nonnull
     private WalletStatusForTransaction walletStatusForTransaction = WalletStatusForTransaction.UNLOCKED;
 
 }
