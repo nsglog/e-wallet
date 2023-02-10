@@ -22,6 +22,6 @@ public class RequestAuthenticationService {
         Account account = accountRepository.findByUsername(username).get();
         Wallet wallet = account.getWallet();
         Long walletId = wallet.getId();
-        return (walletId != Long.parseLong(id));
+        return (walletId == Long.parseLong(id));
     }
 }
